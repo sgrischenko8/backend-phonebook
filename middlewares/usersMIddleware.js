@@ -1,5 +1,7 @@
 const { userValidator } = require("../utils");
 
+console.log("from userMiddleware");
+
 const User = require("../models/userModel");
 const bcrypt = require("bcrypt");
 const { extractId } = require("../services/jwtService");
@@ -239,4 +241,3 @@ exports.checkResendVerificationRequest = async (req, res, next) => {
     res.sendStatus(500);
   }
 };
-
