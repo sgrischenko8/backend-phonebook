@@ -6,7 +6,9 @@ const { sendingEmail } = require("../services/sendingEmail");
 const { nanoid } = require("nanoid");
 
 exports.register = async (req, res, next) => {
-  const { value } = userValidator.checkUserDataValidator.validate(req.body);
+  const { error } = userValidator.checkUserDataValidator.validate(req.body);
+  console.log(error);
+
   req.body.verificationToken = nanoid();
 
   const { email: mail, verificationToken } = req.body;
@@ -64,7 +66,9 @@ exports.logout = async (req, res, next) => {
 };
 
 exports.getCurrentUser = async (req, res, next) => {
-  const { value } = userValidator.checkUserDataValidator.validate(req.body);
+  const { error } = userValidator.checkUserDataValidator.validate(req.body);
+  console.log(error);
+
   const { token } = req.user;
   try {
     const currentUser = await User.findOne({ token });
@@ -101,7 +105,6 @@ exports.updateAvatar = async (req, res, next) => {
     avatar = req.file.path.replace("tmp", "avatars");
   }
   try {
-    if (avatar === "") throw error;
     await User.findByIdAndUpdate(_id, { avatarURL: avatar });
 
     res.status(200).json({ avatarURL: avatar });
