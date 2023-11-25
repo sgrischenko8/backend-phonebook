@@ -2,6 +2,8 @@ const { contactValidator } = require("../utils");
 
 const Contact = require("../models/contactModel");
 
+console.log("from contactController");
+
 exports.listContacts = async (req, res, next) => {
   const { _id } = req.user;
   const { favorite, page, limit } = req.query;

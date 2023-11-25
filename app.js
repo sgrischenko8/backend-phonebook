@@ -5,6 +5,8 @@ const dotenv = require("dotenv");
 
 dotenv.config({ path: "./environment/.env" });
 
+console.log("looking for");
+
 const contactsRouter = require("./routes/api/contactRouter");
 const userRouter = require("./routes/api/userRouter");
 
