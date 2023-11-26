@@ -12,7 +12,7 @@ exports.register = async (req, res, next) => {
   try {
     const user = await User.find({ email });
     console.log(user, "find user");
-    const { id } = user._id;
+    const id = user._id;
 
     if (user) {
       console.log("find user");
