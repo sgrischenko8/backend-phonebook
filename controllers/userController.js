@@ -11,7 +11,7 @@ exports.register = async (req, res, next) => {
   const { email, verificationToken } = req.body;
   try {
     const user = await User.find({ email });
-
+    res.status(200).json({ user });
     if (user) {
       await User.findByIdAndUpdate({ _id: user._id }, req.body);
     } else {
