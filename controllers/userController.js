@@ -1,4 +1,5 @@
 // const { userValidator } = require("../utils");
+const mongoose = require("mongoose");
 
 const User = require("../models/userModel");
 const { signToken } = require("../services/jwtService");
@@ -13,7 +14,10 @@ exports.register = async (req, res, next) => {
     const user = await User.find({ email });
     console.log(user, "find user");
     const id = user._id;
-
+    console.log(id);
+    if (mongoose.Types.ObjectId.isValid(id)) {
+      console.log("id is valid");
+    }
     if (user) {
       console.log("find user");
       await User.findByIdAndUpdate({ _id: id }, req.body);
