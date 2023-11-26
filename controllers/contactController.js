@@ -44,7 +44,7 @@ exports.getById = async (req, res, next) => {
 
 exports.addContact = async (req, res, next) => {
   const { error } = contactValidator.createContactValidator.validate(req.body);
-  console.log(error);
+  console.log(error, req.body, "req.body");
 
   const { _id: owner } = req.user;
 
