@@ -33,10 +33,11 @@ router
 router
   .route("/:contactId/avatars")
   .patch(
-    userMiddleware.checkToken,
-    userMiddleware.checkFile,
-    userMiddleware.uploadContactAvatar,
-    userMiddleware.resizeContactAvatar,
+    contactMiddleware.checkAbsenceBodyInPatch,
+    contactMiddleware.checkContactId,
+    contactMiddleware.checkFile,
+    contactMiddleware.uploadContactAvatar,
+    contactMiddleware.resizeContactAvatar,
     contactController.updateAvatar
   );
 module.exports = router;

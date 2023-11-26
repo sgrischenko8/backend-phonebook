@@ -18,7 +18,7 @@ exports.sendingEmail = async (verificationToken, mail) => {
     to: mail,
     subject: "Verifying email",
     text: verificationToken
-      ? `This message send to verify your email address for registrtation in Phonebook app. Please, click to verify: ${process.env.SITE_URL}/register/${verificationToken}`
+      ? `This message send to verify your email address for registrtation in Phonebook app. Please, click to verify: ${process.env.SITE_URL}/register?verificationToken=${verificationToken}`
       : "You successfully register in Phonebook app. Please login to use the app",
   };
 

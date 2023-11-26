@@ -2,6 +2,11 @@ const { contactValidator } = require("../utils");
 
 const Contact = require("../models/contactModel");
 
+const multer = require("multer");
+const Jimp = require("jimp");
+
+const { unlink } = require("node:fs");
+
 exports.checkContactId = async (req, res, next) => {
   try {
     const { id, contactId } = req.params;
@@ -104,5 +109,46 @@ exports.throwPatchError = (req, res, next) => {
       message: error.message,
     });
   }
+  next();
+};
+
+exports.checkFile = (req, res, next) => {
+  if (!req.file) {
+    return res.status(400).json({
+      message: "Please, upload file!",
+    });
+  }
+  if (!req.file.mimetype.startsWith("image/")) {
+    return res.status(400).json({
+      message:
+        "Incorrect type of image. Please, upload image-type file, e.g. '.jpeg', '.png'",
+    });
+  }
+  next();
+};
+
+const multerStorage = multer.diskStorage({
+  destination: (req, file, callback) => {
+    callback(null, "tmp");
+  },
+  filename: (req, file, callback) => {
+    const extension = file.mimetype.split("/")[1];
+
+    callback(null, `${req.user.id}-${Date.now()}.${extension}`);
+  },
+});
+
+exports.uploadContactAvatar = multer({
+  storage: multerStorage,
+  limits: { fileSize: 2 * 1024 * 1024 },
+}).single("avatarURL");
+
+exports.resizeContactAvatar = async (req, res, next) => {
+  const avatar = await Jimp.read(req.file.path);
+  avatar.resize(250, 250).write(req.file.path.replace("tmp", "public/avatars"));
+
+  unlink(req.file.path, (err) => {
+    if (err) throw err;
+  });
   next();
 };
