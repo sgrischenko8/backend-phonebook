@@ -13,6 +13,10 @@ router
     userController.register
   );
 router
+  .route("/register/:verificationToken")
+  .patch(userMiddleware.checkVerificationToken, userController.verify);
+
+router
   .route("/login")
   .post(
     userMiddleware.checkVerification,
@@ -24,8 +28,5 @@ router
   .route("/current")
   .get(userMiddleware.checkToken, userController.getCurrentUser);
 router.route("/logout").post(userMiddleware.checkToken, userController.logout);
-router
-  .route("/verify/:verificationToken")
-  .get(userMiddleware.checkVerificationToken, userController.verify);
 
 module.exports = router;
