@@ -11,14 +11,15 @@ exports.register = async (req, res, next) => {
   const { email, verificationToken } = req.body;
   try {
     const user = await User.find({ email });
-    const { _id } = user;
-    console.log(user, "user");
-    if (user) {
-      await User.findByIdAndUpdate({ _id }, req.body);
-    } else {
-      await User.create(req.body);
-    }
-    await sendingEmail(verificationToken, email);
+    // const { _id } = user;
+    res.status(201).json({ user });
+    console.log(user, verificationToken, "user");
+    // if (user) {
+    //   await User.findByIdAndUpdate({ _id }, req.body);
+    // } else {
+    //   await User.create(req.body);
+    // }
+    // await sendingEmail(verificationToken, email);
 
     // const { email } = newUser;
     res.status(201).json({ user: { email } });
