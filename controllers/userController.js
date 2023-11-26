@@ -33,8 +33,9 @@ exports.verify = async (req, res, next) => {
       verify: true,
     });
     await sendingEmail(email);
-    // res.status(200).json();
+    res.status(200).json({ message: "Email verified" });
   } catch (error) {
+    console.log(error);
     next(error);
   }
 };
