@@ -108,3 +108,21 @@ exports.updateStatusContact = async (req, res, next) => {
     next(error);
   }
 };
+
+exports.updateAvatar = async (req, res, next) => {
+  const { contactId } = req.params;
+  console.log(req.file);
+  let avatar = "";
+  if (req.file) {
+    avatar = req.file.path.replace("tmp", "avatars");
+  }
+  try {
+    await Contact.findByIdAndUpdate({ _id: contactId }, req.body, {
+      avatarURL: avatar,
+    });
+
+    res.status(200).json({ avatarURL: avatar });
+  } catch (error) {
+    next(error);
+  }
+};

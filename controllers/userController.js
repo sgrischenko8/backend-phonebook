@@ -16,39 +16,36 @@ exports.register = async (req, res, next) => {
     const newUser = await User.create(req.body);
     await sendingEmail(verificationToken, mail);
 
-    const { email, subscription } = newUser;
-    res.status(201).json({ user: { email, subscription } });
+    const { email } = newUser;
+    res.status(201).json({ user: { email } });
   } catch (error) {
     next(error);
   }
 };
 
 exports.verify = async (req, res, next) => {
-  const { _id } = req.user;
+  const { _id, email } = req.user;
 
   try {
     await User.findByIdAndUpdate(_id, {
       verificationToken: null,
       verify: true,
     });
-
-    res.status(200).json({ message: "Verification successful" });
+    await sendingEmail(email);
+    // res.status(200).json();
   } catch (error) {
     next(error);
   }
 };
 
 exports.login = async (req, res, next) => {
-  const { value } = userValidator.checkUserDataValidator.validate(req.body);
-  const { email } = value;
+  const { name, email, id } = req.user;
   try {
-    const user = req.user;
-    const token = signToken(user.id);
-    await User.findByIdAndUpdate({ _id: user.id }, { token });
+    // const user = req.user;
+    const token = signToken(id);
+    await User.findByIdAndUpdate({ _id: id }, { token });
 
-    const { subscription } = user;
-
-    res.status(200).json({ user: { email, subscription }, token });
+    res.status(200).json({ user: { name, email }, token });
   } catch (error) {
     next(error);
   }
@@ -66,60 +63,21 @@ exports.logout = async (req, res, next) => {
 };
 
 exports.getCurrentUser = async (req, res, next) => {
-  const { error } = userValidator.checkUserDataValidator.validate(req.body);
-  console.log(error);
-
-  const { token } = req.user;
+  const { name, email } = req.user;
   try {
-    const currentUser = await User.findOne({ token });
-    const { email, subscription } = currentUser;
-
-    res.status(200).json({ user: { email, subscription } });
+    res.status(200).json({ user: { name, email } });
   } catch (error) {
     next(error);
   }
 };
 
-exports.changeSubscription = async (req, res, next) => {
-  const { _id } = req.user;
-  try {
-    const currentUser = await User.findByIdAndUpdate(
-      { _id },
-      { subscription: req.body.subscription }
-    );
-    const { email } = currentUser;
+// exports.resendVerificationRequest = async (req, res, next) => {
+//   const { verificationToken, email } = req.user;
 
-    res
-      .status(201)
-      .json({ user: { email, subscription: req.body.subscription } });
-  } catch (error) {
-    next(error);
-  }
-};
-
-exports.updateAvatar = async (req, res, next) => {
-  const { _id } = req.user;
-  console.log(req.file);
-  let avatar = "";
-  if (req.file) {
-    avatar = req.file.path.replace("tmp", "avatars");
-  }
-  try {
-    await User.findByIdAndUpdate(_id, { avatarURL: avatar });
-
-    res.status(200).json({ avatarURL: avatar });
-  } catch (error) {
-    next(error);
-  }
-};
-
-exports.resendVerificationRequest = async (req, res, next) => {
-  const { verificationToken, email } = req.user;
-
-  try {
-    await sendingEmail(verificationToken, email);
-    res.status(200).json({ message: "Verification email sent" });
-  } catch (error) {
-    next(error);
-  }
-};
+//   try {
+//     await sendingEmail(verificationToken, email);
+//     res.status(200).json({ message: "Verification email sent" });
+//   } catch (error) {
+//     next(error);
+//   }
+// };

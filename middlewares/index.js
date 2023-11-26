@@ -1,5 +1,4 @@
 const contactMiddleware = require("./contactMiddleware");
-console.log("from middleware");
-const userMiddleware = require("./usersMIddleware");
-console.log("after that middleware");
+const userMiddleware = require("./userMIddleware");
+
 module.exports = { contactMiddleware, userMiddleware };

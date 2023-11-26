@@ -30,4 +30,13 @@ router
     contactMiddleware.throwPatchError,
     contactController.updateStatusContact
   );
+router
+  .route("/:contactId/avatars")
+  .patch(
+    userMiddleware.checkToken,
+    userMiddleware.checkFile,
+    userMiddleware.uploadContactAvatar,
+    userMiddleware.resizeContactAvatar,
+    contactController.updateAvatar
+  );
 module.exports = router;

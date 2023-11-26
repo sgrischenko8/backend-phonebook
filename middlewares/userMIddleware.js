@@ -1,7 +1,5 @@
 const { userValidator } = require("../utils");
 
-console.log("from userMiddleware");
-
 const User = require("../models/userModel");
 const bcrypt = require("bcrypt");
 const { extractId } = require("../services/jwtService");
@@ -17,7 +15,7 @@ exports.checkIsEmailAlreadyUsed = async (req, res, next) => {
   try {
     const user = await User.findOne({ email });
 
-    if (user) {
+    if (user && user?.verify === true) {
       return res.status(409).json({ message: "Email in use" });
     }
 
@@ -108,14 +106,16 @@ exports.checkToken = async (req, res, next) => {
   }
 };
 
-exports.throwPatchSubscriptionError = (req, res, next) => {
-  const { error } = userValidator.updateSubscriptionValidator.validate(
-    req.body
-  );
-
-  if (error) {
+exports.checkFile = (req, res, next) => {
+  if (!req.file) {
     return res.status(400).json({
-      message: error.message,
+      message: "Please, upload file!",
+    });
+  }
+  if (!req.file.mimetype.startsWith("image/")) {
+    return res.status(400).json({
+      message:
+        "Incorrect type of image. Please, upload image-type file, e.g. '.jpeg', '.png'",
     });
   }
   next();
@@ -132,35 +132,12 @@ const multerStorage = multer.diskStorage({
   },
 });
 
-const multerFilter = (req, file, callback) => {
-  if (file.mimetype.startsWith("image/")) {
-    callback(null, true);
-  } else {
-    callback(
-      res.status(400).json({
-        message: "Incorrect type of image. Please, upload image-file!",
-      })
-    );
-  }
-};
-
-exports.uploadUserAvatar = multer({
+exports.uploadContactAvatar = multer({
   storage: multerStorage,
-  fileFilter: multerFilter,
   limits: { fileSize: 2 * 1024 * 1024 },
 }).single("avatarURL");
 
-exports.checkAbsenceFile = (req, res, next) => {
-  if (!req.file) {
-    return res.status(400).json({
-      message: "Please, upload file!",
-    });
-  }
-
-  next();
-};
-
-exports.resizeUserAvatar = async (req, res, next) => {
+exports.resizeContactAvatar = async (req, res, next) => {
   const avatar = await Jimp.read(req.file.path);
   avatar.resize(250, 250).write(req.file.path.replace("tmp", "public/avatars"));
 
@@ -198,39 +175,6 @@ exports.checkVerification = async (req, res, next) => {
     if (user.verify !== true) {
       return res.status(401).json({
         message: "Access denied",
-      });
-    }
-    req.user = user;
-
-    next();
-  } catch (error) {
-    console.log(error);
-    res.sendStatus(500);
-  }
-};
-
-exports.checkResendVerificationRequest = async (req, res, next) => {
-  const { error } = userValidator.resendVerificationRequestValidator.validate(
-    req.body
-  );
-  if (error?.message === '"email" is required') {
-    return res.status(400).json({
-      message: "missing required field email",
-    });
-  }
-  if (error) {
-    return res.status(400).json({
-      message: error.message,
-    });
-  }
-
-  const { email } = req.body;
-
-  try {
-    const user = await User.findOne({ email });
-    if (user.verify === true) {
-      return res.status(400).json({
-        message: "Verification has already been passed",
       });
     }
     req.user = user;
