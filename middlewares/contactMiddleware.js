@@ -74,6 +74,7 @@ exports.checkAbsenceBodyInPatch = async (req, res, next) => {
 
 exports.throwError = (req, res, next) => {
   const { error } = contactValidator.createContactValidator.validate(req.body);
+  console.log(error, req.body, "req.body");
 
   if (error) {
     console.log(error);
