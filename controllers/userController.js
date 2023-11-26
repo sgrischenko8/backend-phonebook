@@ -25,6 +25,7 @@ exports.register = async (req, res, next) => {
     // const { email } = newUser;
     res.status(201).json({ user: { email } });
   } catch (error) {
+    console.log(error);
     next(error);
   }
 };
