@@ -14,6 +14,7 @@ exports.register = async (req, res, next) => {
     const { _id } = user;
 
     if (user) {
+      console.log("find user");
       await User.findByIdAndUpdate({ _id }, req.body);
     } else {
       await User.create(req.body);
