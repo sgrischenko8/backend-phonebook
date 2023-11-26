@@ -15,7 +15,8 @@ exports.register = async (req, res, next) => {
     } else {
       await User.create(req.body);
     }
-    await sendingEmail(verificationToken, email);
+    console.log(verificationToken);
+    // await sendingEmail(verificationToken, email);
 
     res.status(201).json();
   } catch (error) {
