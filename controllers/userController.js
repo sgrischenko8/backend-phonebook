@@ -1,4 +1,4 @@
-const { userValidator } = require("../utils");
+// const { userValidator } = require("../utils");
 
 const User = require("../models/userModel");
 const { signToken } = require("../services/jwtService");
@@ -11,8 +11,9 @@ exports.register = async (req, res, next) => {
   const { email, verificationToken } = req.body;
   try {
     const user = await User.find({ email });
+
     if (user) {
-      await User.findByIdAndUpdate({ _id: user.id }, req.body);
+      await User.findByIdAndUpdate({ _id: user._id }, req.body);
     } else {
       await User.create(req.body);
     }
