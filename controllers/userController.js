@@ -11,10 +11,9 @@ exports.register = async (req, res, next) => {
     const user = await User.findOne({ email });
 
     if (user) {
-      await User.findByIdAndUpdate({ _id: user.id }, req.body);
-    } else {
-      await User.create(req.body);
+      await User.findByIdAndRemove({ _id: user.id });
     }
+    await User.create(req.body);
     console.log(verificationToken);
     // await sendingEmail(verificationToken, email);
 
