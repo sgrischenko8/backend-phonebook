@@ -11,7 +11,7 @@ exports.register = async (req, res, next) => {
 
   const { email, verificationToken } = req.body;
   try {
-    const user = await User.find({ email });
+    const user = await User.findOne({ email });
     console.log(user, "find user");
     const id = user._id;
     console.log(id);
