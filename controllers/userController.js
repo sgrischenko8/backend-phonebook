@@ -1,6 +1,3 @@
-// const { userValidator } = require("../utils");
-const mongoose = require("mongoose");
-
 const User = require("../models/userModel");
 const { signToken } = require("../services/jwtService");
 const { sendingEmail } = require("../services/sendingEmail");
@@ -12,22 +9,15 @@ exports.register = async (req, res, next) => {
   const { email, verificationToken } = req.body;
   try {
     const user = await User.findOne({ email });
-    console.log(user, "find user");
-    const id = user._id;
-    console.log(id);
-    if (mongoose.Types.ObjectId.isValid(id)) {
-      console.log("id is valid");
-    }
+
     if (user) {
-      console.log("find user");
-      await User.findByIdAndUpdate({ _id: id }, req.body);
+      await User.findByIdAndUpdate({ _id: user.id }, req.body);
     } else {
       await User.create(req.body);
     }
     await sendingEmail(verificationToken, email);
 
-    // const { email } = newUser;
-    res.status(201).json({ user: { email } });
+    res.status(201).json();
   } catch (error) {
     console.log(error);
     next(error);
