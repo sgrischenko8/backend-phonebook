@@ -44,10 +44,10 @@ exports.getById = async (req, res, next) => {
 
 exports.addContact = async (req, res, next) => {
   const { error } = contactValidator.createContactValidator.validate(req.body);
-  console.log(error, req.body, "req.body in add");
+  console.log(error);
 
-  // const { _id: owner } = req.user;
-
+  const { _id: owner } = req.user;
+  req.body._id = owner;
   try {
     const newContact = await Contact.create(req.body);
 
