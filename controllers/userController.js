@@ -11,11 +11,12 @@ exports.register = async (req, res, next) => {
   const { email, verificationToken } = req.body;
   try {
     const user = await User.find({ email });
-    const { _id } = user;
+    console.log(user, "find user");
+    const { id } = user._id;
 
     if (user) {
       console.log("find user");
-      await User.findByIdAndUpdate({ _id }, req.body);
+      await User.findByIdAndUpdate({ _id: id }, req.body);
     } else {
       await User.create(req.body);
     }
