@@ -6,17 +6,19 @@ const { sendingEmail } = require("../services/sendingEmail");
 const { nanoid } = require("nanoid");
 
 exports.register = async (req, res, next) => {
-  const { error } = userValidator.checkUserDataValidator.validate(req.body);
-  console.log(error);
-
   req.body.verificationToken = nanoid();
 
-  const { email: mail, verificationToken } = req.body;
+  const { email, verificationToken } = req.body;
   try {
-    const newUser = await User.create(req.body);
-    await sendingEmail(verificationToken, mail);
+    const user = await User.find({ email });
+    if (user) {
+      await User.findByIdAndUpdate({ _id: user.id }, req.body);
+    } else {
+      await User.create(req.body);
+    }
+    await sendingEmail(verificationToken, email);
 
-    const { email } = newUser;
+    // const { email } = newUser;
     res.status(201).json({ user: { email } });
   } catch (error) {
     next(error);
