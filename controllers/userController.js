@@ -11,7 +11,7 @@ exports.register = async (req, res, next) => {
     const user = await User.findOne({ email });
 
     if (user) {
-      await User.findOnedAndRemove({ _id: user.id });
+      await User.deleteOne({ _id: user.id });
     }
     await User.create(req.body);
     console.log(verificationToken);
