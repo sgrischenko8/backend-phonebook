@@ -14,8 +14,8 @@ exports.register = async (req, res, next) => {
       await User.deleteOne({ _id: user.id });
     }
     await User.create(req.body);
-    console.log(verificationToken);
-    // await sendingEmail(verificationToken, email);
+
+    await sendingEmail(verificationToken, email);
 
     res.status(201).json();
   } catch (error) {
