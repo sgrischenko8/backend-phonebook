@@ -67,7 +67,7 @@ exports.logout = async (req, res, next) => {
 exports.getCurrentUser = async (req, res, next) => {
   const { name, email } = req.user;
   try {
-    res.status(200).json({ user: { name, email } });
+    res.status(200).json({ name, email });
   } catch (error) {
     next(error);
   }
