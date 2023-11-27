@@ -54,44 +54,40 @@ exports.removeContact = async (req, res, next) => {
 };
 
 exports.updateContact = async (req, res, next) => {
-  const { value } = contactValidator.createContactValidator.validate(req.body);
-  const { name, email, phone, favorite } = value;
-
   const { contactId } = req.params;
 
   try {
     const currentContact = await Contact.findByIdAndUpdate(
       { _id: contactId },
-      req.body,
-      { name, email, phone, favorite }
+      req.body
     );
-    const updatedContact = Object.assign(currentContact, value);
+    const updatedContact = Object.assign(currentContact, req.body);
     res.status(201).json(updatedContact);
   } catch (error) {
     next(error);
   }
 };
 
-exports.updateStatusContact = async (req, res, next) => {
-  const { value } = contactValidator.updateContactStatusValidator.validate(
-    req.body
-  );
-  const { favorite } = value;
+// exports.updateStatusContact = async (req, res, next) => {
+//   const { value } = contactValidator.updateContactStatusValidator.validate(
+//     req.body
+//   );
+//   const { favorite } = value;
 
-  const { contactId } = req.params;
+//   const { contactId } = req.params;
 
-  try {
-    const currentContact = await Contact.findByIdAndUpdate(
-      { _id: contactId },
-      req.body,
-      { favorite }
-    );
-    const updatedContact = Object.assign(currentContact, value);
-    res.status(201).json(updatedContact);
-  } catch (error) {
-    next(error);
-  }
-};
+//   try {
+//     const currentContact = await Contact.findByIdAndUpdate(
+//       { _id: contactId },
+//       req.body,
+//       { favorite }
+//     );
+//     const updatedContact = Object.assign(currentContact, value);
+//     res.status(201).json(updatedContact);
+//   } catch (error) {
+//     next(error);
+//   }
+// };
 
 exports.updateAvatar = async (req, res, next) => {
   const { contactId } = req.params;

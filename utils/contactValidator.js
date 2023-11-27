@@ -8,6 +8,6 @@ exports.createContactValidator = Joi.object({
   avatar: Joi.string(),
 }).options({ abortEarly: false, convert: false });
 
-exports.updateContactStatusValidator = Joi.object({
-  favorite: Joi.boolean().required(),
-}).options({ abortEarly: false, convert: false });
+// exports.updateContactStatusValidator = Joi.object({
+//   favorite: Joi.boolean().required(),
+// }).options({ abortEarly: false, convert: false });

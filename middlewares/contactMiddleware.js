@@ -46,23 +46,10 @@ exports.checkAbsenceBody = async (req, res, next) => {
   }
 };
 
-exports.checkAbsenceBodyInPut = async (req, res, next) => {
-  try {
-    if (Object.keys(req.body).length === 0) {
-      return res.status(400).json({ message: "missing fields" });
-    }
-
-    next();
-  } catch (error) {
-    console.log(error);
-    res.sendStatus(500);
-  }
-};
-
 exports.checkAbsenceBodyInPatch = async (req, res, next) => {
   try {
     if (Object.keys(req.body).length === 0) {
-      return res.status(400).json({ message: "missing field favorite" });
+      return res.status(400).json({ message: "missing fields" });
     }
 
     next();
@@ -95,19 +82,6 @@ exports.throwError = (req, res, next) => {
         message,
       });
     }
-  }
-  next();
-};
-
-exports.throwPatchError = (req, res, next) => {
-  const { error } = contactValidator.updateContactStatusValidator.validate(
-    req.body
-  );
-
-  if (error) {
-    return res.status(400).json({
-      message: error.message,
-    });
   }
   next();
 };

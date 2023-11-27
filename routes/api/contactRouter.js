@@ -14,20 +14,12 @@ router
 router.use("/:contactId", contactMiddleware.checkContactId);
 router
   .route("/:contactId")
-  .put(
-    contactMiddleware.checkAbsenceBodyInPut,
+  .patch(
+    contactMiddleware.checkAbsenceBodyInPatch,
     contactMiddleware.throwError,
     contactController.updateContact
   )
   .delete(contactMiddleware.checkAbsenceBody, contactController.removeContact);
-router
-  .route("/:contactId/favorite")
-  .patch(
-    contactMiddleware.checkAbsenceBodyInPatch,
-    contactMiddleware.checkContactId,
-    contactMiddleware.throwPatchError,
-    contactController.updateStatusContact
-  );
 router
   .route("/:contactId/avatars")
   .patch(
