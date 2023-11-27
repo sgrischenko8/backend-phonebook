@@ -126,6 +126,9 @@ exports.checkVerification = async (req, res, next) => {
 
   try {
     const user = await User.findOne({ email });
+    if (!user) {
+      return res.status(401).json({ message: "Email or password is wrong" });
+    }
     if (user.verify !== true) {
       return res.status(401).json({
         message: "Access denied",
