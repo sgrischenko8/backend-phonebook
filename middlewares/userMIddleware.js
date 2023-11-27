@@ -49,13 +49,9 @@ exports.checkUserData = async (req, res, next) => {
 };
 
 exports.IsEmailAndPasswordFit = async (req, res, next) => {
-  const { email, password } = req.body;
+  const { password } = req.body;
   try {
-    const user = await User.findOne({ email });
-    if (!user) {
-      return res.status(401).json({ message: "Email or password is wrong" });
-    }
-    const IsPasswordValid = await bcrypt.compare(password, user.password);
+    const IsPasswordValid = await bcrypt.compare(password, req.user.password);
 
     if (!IsPasswordValid) {
       return res.status(401).json({ message: "Email or password is wrong" });
