@@ -16,7 +16,6 @@ router
   .route("/:contactId")
   .patch(
     contactMiddleware.checkAbsenceBodyInPatch,
-    contactMiddleware.throwError,
     contactController.updateContact
   )
   .delete(contactMiddleware.checkAbsenceBody, contactController.removeContact);

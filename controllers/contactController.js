@@ -1,4 +1,4 @@
-const { contactValidator } = require("../utils");
+// const { contactValidator } = require("../utils");
 
 const Contact = require("../models/contactModel");
 
