@@ -15,3 +15,5 @@ mongoose
     console.log(err.message);
     process.exit(1);
   });
+
+setInterval(() => console.log("tick"), 840000);

@@ -1,5 +1,3 @@
-// const { contactValidator } = require("../utils");
-
 const Contact = require("../models/contactModel");
 
 exports.listContacts = async (req, res, next) => {
@@ -67,27 +65,6 @@ exports.updateContact = async (req, res, next) => {
     next(error);
   }
 };
-
-// exports.updateStatusContact = async (req, res, next) => {
-//   const { value } = contactValidator.updateContactStatusValidator.validate(
-//     req.body
-//   );
-//   const { favorite } = value;
-
-//   const { contactId } = req.params;
-
-//   try {
-//     const currentContact = await Contact.findByIdAndUpdate(
-//       { _id: contactId },
-//       req.body,
-//       { favorite }
-//     );
-//     const updatedContact = Object.assign(currentContact, value);
-//     res.status(201).json(updatedContact);
-//   } catch (error) {
-//     next(error);
-//   }
-// };
 
 exports.updateAvatar = async (req, res, next) => {
   const { contactId } = req.params;
