@@ -29,19 +29,6 @@ exports.listContacts = async (req, res, next) => {
   }
 };
 
-exports.getById = async (req, res, next) => {
-  const { id } = req.params;
-
-  try {
-    const contact = await Contact.findOne({ _id: id });
-
-    res.status(200).json(contact);
-  } catch (error) {
-    res.status(404).json({ message: "Not found" });
-    next(error);
-  }
-};
-
 exports.addContact = async (req, res, next) => {
   const { _id: owner } = req.user;
   req.body.owner = owner;
@@ -55,9 +42,9 @@ exports.addContact = async (req, res, next) => {
 };
 
 exports.removeContact = async (req, res, next) => {
-  const { id } = req.params;
+  const { contactId } = req.params;
   try {
-    await Contact.findByIdAndRemove({ _id: id });
+    await Contact.deleteOne({ _id: contactId });
 
     res.status(200).json({ message: "contact deleted" });
   } catch (error) {
@@ -70,11 +57,11 @@ exports.updateContact = async (req, res, next) => {
   const { value } = contactValidator.createContactValidator.validate(req.body);
   const { name, email, phone, favorite } = value;
 
-  const { id } = req.params;
+  const { contactId } = req.params;
 
   try {
     const currentContact = await Contact.findByIdAndUpdate(
-      { _id: id },
+      { _id: contactId },
       req.body,
       { name, email, phone, favorite }
     );

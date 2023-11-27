@@ -9,9 +9,9 @@ const { unlink } = require("node:fs");
 
 exports.checkContactId = async (req, res, next) => {
   try {
-    const { id, contactId } = req.params;
+    const { contactId } = req.params;
 
-    const contact = await Contact.findOne({ _id: id || contactId });
+    const contact = await Contact.findOne({ _id: contactId });
 
     if (!contact) {
       return res.status(404).json({ message: "Not found" });
