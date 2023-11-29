@@ -27,6 +27,9 @@ router
 router
   .route("/current")
   .get(userMiddleware.checkToken, userController.getCurrentUser);
+router
+  .route("/ping")
+  .get(userController.getPing);
 router.route("/logout").post(userMiddleware.checkToken, userController.logout);
 
 module.exports = router;
